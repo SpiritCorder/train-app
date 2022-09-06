@@ -1,0 +1,74 @@
+.loginContainer {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #CFD9FB;
+}
+
+.formContainer {
+    width: 450px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 60px 60px;
+    background-color: #3748DB;
+    border-radius: 15px;
+}
+
+.formTitle {
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+.formContainer form {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.formContainer form input {
+    padding: 8px 20px;
+    width: 100%;
+    border-radius: 15px;
+    background-color: #3748DB;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.formContainer form input::placeholder {
+    color: #fff;
+}
+
+.formContainer form input:focus {
+    outline: none;
+}
+
+.formContainer form p {
+    color: #fff;
+    margin-top: -10px;
+    font-size: 14px;
+}
+
+.formContainer form p a {
+    color: red;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.btnContainer {
+    text-align: center;
+}
+
+.btn {
+    display: inline-block;
+    border: 1px solid #fff;
+    color: #fff;
+    background-color: #3748DB;
+    padding: 8px 30px;
+    font-weight: bold;
+    border-radius: 15px;
+}
