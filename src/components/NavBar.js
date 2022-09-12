@@ -27,12 +27,12 @@ export default function NavBar() {
         <div className="nav-bar-item-list">
 
             <ul>
-                <Link to='#' className='active'><li>Dashbord</li></Link>
+                <Link to='/' className='active'><li>Dashbord</li></Link>
                 <Link to='#'><li>Total Tickets</li></Link>
                 <Link to='#'><li>Total Income</li></Link>
                 <Link to='#'><li>Passenger Information</li></Link>
                 <Link to='#'><li>Change Shedule</li></Link>
-                <Link to='#'><li>Add Train</li></Link>
+                <Link to='/add-train'><li>Add Train</li></Link>
                 <button onClick={handleLogout}><li>Log Out</li></button>
             </ul>
         </div>
