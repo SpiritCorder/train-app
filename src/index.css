@@ -7,3 +7,25 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* global styles */
+ 
+  /* width */
+  .scrollable::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  /* Track */
+  .scrollable::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  .scrollable::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  .scrollable::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

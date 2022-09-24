@@ -1,50 +1,142 @@
-import React from 'react'
+import React, {useState} from 'react';
+import {toast} from 'react-toastify';
+import {addDoc, collection, doc, setDoc, getDoc} from 'firebase/firestore';
+import {db} from '../config/firebase';
 import './addTrain.css';
 
 export default function AddTrainForm() {
+
+    const [title, setTitle] = useState('');
+    const [start, setStart] = useState('');
+    const [end, setEnd] = useState('');
+    const [sTime, setSTime] = useState('');
+    const [eTime, setETime] = useState('');
+    const [seats, setSeats] = useState(0);
+    const [ticketPrice, setTicketPrice] = useState(0.00);
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = e => {
+        e.preventDefault();
+
+        setLoading(true);
+
+        const newTrain = {
+            title: title.trim(),
+            startPoint: start.trim(),
+            endPoint: end.trim(),
+            startTime: sTime.trim(),
+            endTime: eTime.trim(),
+            totalSeats: +seats,
+            ticketPrice: +ticketPrice,
+            bookedSeats: 0,
+            totalIncome: 0,
+            totalBookings: 0
+        }
+
+        const {title:trainTitle, startPoint, endPoint, startTime, endTime, totalSeats, ticketPrice:price} = newTrain;
+
+        if(!trainTitle || !startPoint || !endPoint || !startTime || !endTime || totalSeats <= 0 || price <= 0) {
+            setLoading(false);
+            toast.error('Invalid values for fields. make sure all values are valid');
+            return;
+        }
+
+        newTrain.startTime = sTime.split(':')[0] >= 12 ? `${sTime.trim()} PM` : `${sTime} AM`;
+        newTrain.endTime = eTime.split(':')[0] >= 12 ? `${eTime.trim()} PM` : `${eTime} AM`;
+
+        // create a collection reference
+        const colRef = collection(db, 'trains');
+        addDoc(colRef, newTrain)
+            .then(res => {
+                setTitle('');
+                setStart('');
+                setEnd('');
+                setSTime('');
+                setETime('');
+                setSeats(0);
+                setTicketPrice(0.00);
+                toast.success('New Train Added Successfully')
+                setLoading(false);
+
+                // update the train count in counts collection
+                getDoc(doc(db, 'counts', 'total-train-count'))
+                    .then(snapshot => {
+                        const currentCount = snapshot.data().count;
+                        return setDoc(doc(db, 'counts', 'total-train-count'), {count: currentCount + 1});
+                    })
+                    .then(() => {
+                        
+                    })
+                    .catch(err => {
+                        console.log(err.message)
+                    })
+
+
+            })
+            .catch(err => {
+                setLoading(false);
+                console.log(err.message)
+            })
+    }
+
+
   return (
     <div className='add-new-train-card'>
         <div className="form-topic">
             <p>Add New Train</p>
         </div>
-        <div className="form-content">
+        <form onSubmit={handleSubmit}>
+            <div className="form-content">
 
-            <div className="train-title-row">
-                    <div className="train-title">
-                        <label>Train Title</label>
-                        <input type='text' placeholder='Enter Train Title'/>
+                <div className="train-title-row">
+                        <div className="train-title">
+                            <label>Train Title</label>
+                            <input type='text' placeholder='Enter Train Title' onChange={e => setTitle(e.target.value)} value={title} />
+                        </div>
+                </div>
+
+                <div className="start-end-points">
+                    <div className="train-start-point">
+                        <label>Start Point</label>
+                        <input type='text' placeholder='Enter Start Point' onChange={e => setStart(e.target.value)} value={start} />
                     </div>
-            </div>
 
-            <div className="start-end-points">
-                <div className="train-start-point">
-                    <label>Start Point</label>
-                    <input type='text' placeholder='Enter Start Point'/>
+                    <div className="tarin-end-point">
+                        <label>End Point</label>
+                        <input type='text' placeholder='Enter End Point' onChange={e => setEnd(e.target.value)} value={end} />
+                    </div>
                 </div>
 
-                <div className="tarin-end-point">
-                    <label>End Point</label>
-                    <input type='text' placeholder='Enter End Point'/>
+                <div className="start-end-time">
+                    <div className="train-start-time">
+                        <label>Start time</label>
+                        <input type='time' onChange={e => setSTime(e.target.value)} value={sTime} />
+                    </div>
+
+                    <div className="train-stop-time">
+                        <label>Stop time</label>
+                        <input type='time' onChange={e => setETime(e.target.value)} value={eTime} />
+                    </div>
                 </div>
-            </div>
 
-            <div className="start-end-time">
-                <div className="train-start-time">
-                    <label>Start time</label>
-                    <input type='time'/>
+                <div className="start-end-time">
+                    <div className="train-start-time">
+                        <label>Total available seats</label>
+                        <input type='number' onChange={e => setSeats(e.target.value)} value={seats}/>
+                    </div>
+
+                    <div className="train-stop-time">
+                        <label>Ticket price per seat</label>
+                        <input type='number' step='.01' onChange={e => setTicketPrice(e.target.value)} value={ticketPrice} />
+                    </div>
                 </div>
 
-                <div className="train-stop-time">
-                    <label>Stop time</label>
-                    <input type='time'/>
+                <div className="button-row">
+                    <button type='submit'>{loading ? <i id='spinner-icon' className="fa fa-spinner" aria-hidden="true"></i> : 'Add New Train'}</button>
                 </div>
-            </div>
 
-            <div className="button-row">
-                <button>Add Train</button>
             </div>
-
-        </div>
+        </form>
     </div>
   )
 }

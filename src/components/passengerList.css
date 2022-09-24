@@ -1,0 +1,12 @@
+.passenger-list {
+    height: 660px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    width: 100%;
+}
+
+.passenger-list-card {
+    padding: 30px;
+    border: 1px solid rgb(211, 211, 211);
+    max-width: 90%;
+}

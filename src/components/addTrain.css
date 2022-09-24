@@ -7,7 +7,6 @@
 .add-new-train-card
 {
     width: 70vw;
-    height: 80vh;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 10px;
     margin-top: 30px;
@@ -17,6 +16,10 @@
     align-items: center;
     justify-content: flex-start;
     background-color: #fff;
+}
+
+.add-new-train-card > form {
+    width: 100%;
 }
 
 .form-topic
@@ -112,4 +115,16 @@
     background-color: #3748DB;
     color: #fff;
     font-size: 15px;
+    cursor: pointer;
+}
+
+#spinner-icon {
+    font-size: 20px;
+    animation: spin .8s ease infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }

@@ -63,7 +63,7 @@
     text-align: center;
 }
 
-.btn {
+.btn-my {
     display: inline-block;
     border: 1px solid #fff;
     color: #fff;
@@ -71,4 +71,15 @@
     padding: 8px 30px;
     font-weight: bold;
     border-radius: 15px;
+}
+
+.btn-my > i {
+    font-size: 20px;
+    animation: spin .8s ease infinite;
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
 }

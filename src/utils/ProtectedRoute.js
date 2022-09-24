@@ -1,30 +1,21 @@
-import {useState, useEffect} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useContext} from 'react';
+import {AuthContext} from '../context/authContext';
+import {Navigate} from 'react-router-dom';
+import {toast} from 'react-toastify';
 
 const ProtectedRoute = ({children}) => {
 
-    const [loading, setLoading] = useState(true);
+    const {auth: {user}} = useContext(AuthContext);
 
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        // check wether the user has logged in or not
-        const isLoggedIn = localStorage.getItem('loggedInUser') ? localStorage.getItem('loggedInUser') : null;
-
-        if(!isLoggedIn) {
-            // redirect to the login page
-            navigate('/login');
-        } else {
-            setLoading(false);
-        }
-    }, [navigate]);
+    const notifyNotAdmin = () => {
+        toast.error('Sorry your not an admin');
+        
+        return <Navigate to='/login' />
+    }
 
     return (
-        loading ? (
-            <p>Loading...</p>
-        ) : (
-            children
-        )
+
+        !user ? <Navigate to='/login' /> : (user && !user.isAdmin) ? notifyNotAdmin() : (user && user.isAdmin) && children
     );
 }
 

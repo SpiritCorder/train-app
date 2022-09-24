@@ -8,7 +8,7 @@ const AddNewTrain = () => {
 
 
     return (
-        <BaseLayout children={<AddTrainForm />} />
+        <BaseLayout children={<AddTrainForm />} active="add-train" />
     );
 }
 

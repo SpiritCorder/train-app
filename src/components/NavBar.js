@@ -1,20 +1,30 @@
-import React from 'react'
+import React, {useContext} from 'react'
+import {signOut} from 'firebase/auth';
+import {auth} from '../config/firebase';
+import {AuthContext} from '../context/authContext';
 import {Link, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import './navbar.css';
 
-export default function NavBar() {
+export default function NavBar({active}) {
+
+  const {dispatch} = useContext(AuthContext);
 
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // logout current user
-    localStorage.removeItem('loggedInUser');
-
-    toast.success('Logout Success');
-
-    // redirect to login page
-    navigate('/login');
+    signOut(auth)
+      .then(() => {
+        // signout success
+        toast.success('Signout success');
+        // remove auth user from the state
+        dispatch({type: 'LOGOUT_SUCCESS'});
+        navigate('/login');
+      })
+      .catch(err => {
+        // signout failed
+        toast.error('Failed to signout, please try again');
+      })
 
   }
 
@@ -27,12 +37,12 @@ export default function NavBar() {
         <div className="nav-bar-item-list">
 
             <ul>
-                <Link to='/' className='active'><li>Dashbord</li></Link>
-                <Link to='#'><li>Total Tickets</li></Link>
-                <Link to='#'><li>Total Income</li></Link>
-                <Link to='#'><li>Passenger Information</li></Link>
-                <Link to='#'><li>Change Shedule</li></Link>
-                <Link to='/add-train'><li>Add Train</li></Link>
+                <Link to='/' className={active === 'dashboard' ? 'active' : ''}><li>Dashbord</li></Link>
+                <Link to='/trains/add-train' className={active === 'add-train' ? 'active' : ''}><li>Add Train</li></Link>
+                <Link to='/trains' className={active === 'trains' ? 'active' : ''}><li>Train Details</li></Link>
+                <Link to='/passengers' className={active === 'passenger' ? 'active' : ''}><li>Passenger Information</li></Link>
+                <Link to='/income' className={active === 'income' ? 'active' : ''}><li>All Incomes</li></Link>
+                
                 <button onClick={handleLogout}><li>Log Out</li></button>
             </ul>
         </div>
