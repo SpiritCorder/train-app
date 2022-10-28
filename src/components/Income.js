@@ -1,13 +1,16 @@
 import {useState, useEffect} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {db} from '../config/firebase';
 import {collection, getDocs} from 'firebase/firestore';
-import {Row, Col, ListGroup} from 'react-bootstrap';
+import {Row, Col, ListGroup, Button} from 'react-bootstrap';
 
 import Loader from '../utils/Loader';
 
 import './income.css';
 
 const Income = () => {
+
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [trains, setTrains] = useState([]);
@@ -57,8 +60,26 @@ const Income = () => {
                                     <ListGroup>
                                         <ListGroup.Item>
                                             <Row>
-                                                <Col>Ticket Price (per seat)</Col>
-                                                <Col>{t.ticketPrice}</Col>
+                                                <Col>Total seats booked in first class</Col>
+                                                <Col>{t.bookedSeatsFirstClass}</Col>
+                                            </Row>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <Row>
+                                                <Col>First class ticket price (per seat)</Col>
+                                                <Col>LKR. {t.firstClass?.price}</Col>
+                                            </Row>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <Row>
+                                                <Col>Total seats booked in second class</Col>
+                                                <Col>{t.bookedSeatsSecondClass}</Col>
+                                            </Row>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <Row>
+                                                <Col>Second class ticket price (per seat)</Col>
+                                                <Col>LKR. {t.secondClass?.price}</Col>
                                             </Row>
                                         </ListGroup.Item>
                                         <ListGroup.Item>
@@ -70,7 +91,15 @@ const Income = () => {
                                         <ListGroup.Item>
                                             <Row>
                                                 <Col>Total Income</Col>
-                                                <Col>Rs. {t.totalIncome.toFixed(2)}</Col>
+                                                <Col>LKR. {t.totalIncome.toFixed(2)}</Col>
+                                            </Row>
+                                        </ListGroup.Item>
+                                        <ListGroup.Item>
+                                            <Row>
+                                                <Col>View Bookings</Col>
+                                                <Col>
+                                                    <Button variant='primary' onClick={() => navigate(`/trains/bookings/${t.id}`)}>Bookings</Button>
+                                                </Col>
                                             </Row>
                                         </ListGroup.Item>
                                     </ListGroup>

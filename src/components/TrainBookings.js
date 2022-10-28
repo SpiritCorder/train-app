@@ -47,8 +47,9 @@ const TrainBookings = () => {
                     statInfo.totalBookings++;
                     
                     const current = b.data();
-                    statInfo.totalIncome += (+current.totalPrice);
-                    statInfo.totalBookedSeats += current.totalSeats;
+
+                    statInfo.totalIncome += (+current.bookings?.firstClass?.total || 0) + ((+current.bookings?.secondClass?.total || 0))
+                    statInfo.totalBookedSeats += (+current.bookings?.firstClass?.seats || 0) + ((+current.bookings?.secondClass?.seats || 0));
 
                     bookingsInfo.push({...current, id: b.id});
                 })
@@ -73,7 +74,14 @@ const TrainBookings = () => {
                 <Row className="mb-5">
                     <Col>
                         <h1>{train.title}</h1>
-                        <h4>Ticket Price (per seat) : Rs. {train.ticketPrice.toFixed(2)}</h4>
+                        <div>
+                            <p>First Class Seats : {train.firstClass?.seats}</p>
+                            <p>First Class ticket price (per seat) : {train.firstClass?.price}</p>
+                        </div>
+                        <div>
+                            <p>Second Class Seats : {train.secondClass?.seats}</p>
+                            <p>Second Class ticket price (per seat) : {train.secondClass?.price}</p>
+                        </div>
                         <hr></hr>
                     </Col>
                 </Row>
@@ -110,16 +118,43 @@ const TrainBookings = () => {
                                                 <Col>{booking.trainId}</Col>
                                             </Row>
                                         </ListGroup.Item>
+                                        {booking.bookings.firstClass && (
+                                            <>
+                                                <ListGroup.Item>
+                                                    <Row>
+                                                        <Col>Num of seats booked in first class</Col>
+                                                        <Col>{booking.bookings.firstClass?.seats}</Col>
+                                                    </Row>
+                                                </ListGroup.Item>
+                                                <ListGroup.Item>
+                                                    <Row>
+                                                        <Col>Total ticket price for first class</Col>
+                                                        <Col>LKR. {booking.bookings.firstClass?.total}</Col>
+                                                    </Row>
+                                                </ListGroup.Item>
+                                            </>
+                                        )}
+                                        {booking.bookings.secondClass && (
+                                            <>
+                                                <ListGroup.Item>
+                                                    <Row>
+                                                        <Col>Num of seats booked in second class</Col>
+                                                        <Col>{booking.bookings.secondClass?.seats}</Col>
+                                                    </Row>
+                                                </ListGroup.Item>
+                                                <ListGroup.Item>
+                                                    <Row>
+                                                        <Col>Total ticket price for second class</Col>
+                                                        <Col>LKR. {booking.bookings.secondClass?.total}</Col>
+                                                    </Row>
+                                                </ListGroup.Item>
+                                            </>
+                                        )}
+                                        
                                         <ListGroup.Item>
                                             <Row>
-                                                <Col>Num of seats booked</Col>
-                                                <Col>{booking.totalSeats}</Col>
-                                            </Row>
-                                        </ListGroup.Item>
-                                        <ListGroup.Item>
-                                            <Row>
-                                                <Col>Total Paid</Col>
-                                                <Col>Rs. {booking.totalPrice}</Col>
+                                                <Col>Total </Col>
+                                                <Col>LKR. {(booking.bookings.firstClass?.total || 0) + (booking.bookings.secondClass?.total || 0)}</Col>
                                             </Row>
                                         </ListGroup.Item>
                                     </ListGroup>
@@ -144,8 +179,8 @@ const TrainBookings = () => {
                                 </ListGroup.Item>
                                 <ListGroup.Item>
                                     <Row>
-                                        <Col>Remaining Seats</Col>
-                                        <Col>{train.totalSeats - stats.totalBookedSeats}</Col>
+                                        <Col>Total Remaining Seats</Col>
+                                        <Col>{((+train.firstClass?.seats || 0) + (+train.secondClass?.seats || 0)) - stats.totalBookedSeats}</Col>
                                     </Row>
                                 </ListGroup.Item>
                                 <ListGroup.Item>

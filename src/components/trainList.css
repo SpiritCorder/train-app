@@ -22,3 +22,13 @@
 .train-list-train-data > li > p {
     width: 50%;
 }
+
+.train-info {
+    font-size: 12px;
+}
+
+.train-info > p {
+    padding: 5px;
+    background-color: limegreen;
+    color: #fff;
+}

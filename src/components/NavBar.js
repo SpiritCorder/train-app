@@ -1,14 +1,13 @@
-import React, {useContext} from 'react'
+import useAuth from '../hooks/useAuth';
 import {signOut} from 'firebase/auth';
 import {auth} from '../config/firebase';
-import {AuthContext} from '../context/authContext';
 import {Link, useNavigate} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import './navbar.css';
 
 export default function NavBar({active}) {
 
-  const {dispatch} = useContext(AuthContext);
+  const {dispatch} = useAuth();
 
   const navigate = useNavigate();
 
